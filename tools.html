@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Tools — HeyTyom</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --accent: #a6ff00;
+      --accent-dim: #7abf00;
+      --bg: #000000;
+      --surface: #0d0d0d;
+      --surface-2: #151515;
+      --border: #222222;
+      --text: #f0f0f0;
+      --muted: #666666;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; cursor: none; overflow-x: hidden; }
+    #cursor { width:12px;height:12px;background:var(--accent);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transition:transform 0.1s ease;mix-blend-mode:difference; }
+    #cursor-ring { width:40px;height:40px;border:1px solid var(--accent);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transition:all 0.15s ease;opacity:0.5; }
+    .grid-bg { position:absolute;inset:0;background-image:linear-gradient(rgba(166,255,0,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(166,255,0,0.04) 1px,transparent 1px);background-size:60px 60px; }
+    .glow-blob { position:absolute;border-radius:50%;filter:blur(120px);opacity:0.15;animation:floatBlob 8s ease-in-out infinite alternate; }
+    @keyframes floatBlob { from{transform:translate(0,0) scale(1)} to{transform:translate(30px,-20px) scale(1.1)} }
+    .font-display { font-family: 'Bebas Neue', sans-serif; }
+    .font-heading  { font-family: 'Syne', sans-serif; }
+    .font-mono     { font-family: 'DM Mono', monospace; }
+    .text-accent  { color: var(--accent); }
+    .glow-text { text-shadow: 0 0 20px rgba(166,255,0,0.5), 0 0 60px rgba(166,255,0,0.2); }
+    nav { position:fixed;top:0;width:100%;z-index:100;border-bottom:1px solid var(--border);backdrop-filter:blur(20px);background:rgba(0,0,0,0.7); }
+    .nav-link { position:relative;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s; }
+    .nav-link::after { content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--accent);transition:width 0.3s ease; }
+    .nav-link:hover { color: var(--text); }
+    .nav-link:hover::after { width: 100%; }
+    .nav-link.active { color: var(--accent); }
+    .nav-link.active::after { width: 100%; }
+
+    /* Tool card */
+    .tool-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      transition: all 0.35s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      transform: scaleX(0);
+      transition: transform 0.4s ease;
+    }
+    .tool-card:hover::before { transform: scaleX(1); }
+    .tool-card:hover {
+      border-color: rgba(166,255,0,0.25);
+      transform: translateY(-6px);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.6), 0 0 40px rgba(166,255,0,0.05);
+    }
+
+    /* Featured badge */
+    .badge-featured {
+      background: var(--accent);
+      color: #000;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      padding: 3px 8px;
+      letter-spacing: 0.05em;
+    }
+    .badge-free {
+      background: rgba(166,255,0,0.1);
+      color: var(--accent);
+      border: 1px solid rgba(166,255,0,0.3);
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      padding: 3px 8px;
+      letter-spacing: 0.05em;
+    }
+    .badge-paid {
+      background: rgba(255,255,255,0.05);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      padding: 3px 8px;
+      letter-spacing: 0.05em;
+    }
+
+    /* Tag */
+    .tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tag:hover, .tag.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(166,255,0,0.05);
+    }
+
+    /* Rating stars */
+    .stars { color: var(--accent); font-size: 12px; letter-spacing: 1px; }
+
+    /* CTA button */
+    .btn-accent { background:var(--accent);color:#000;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.05em;padding:10px 20px;border:none;cursor:pointer;transition:all 0.2s ease;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px)); }
+    .btn-accent:hover { background:#fff; box-shadow:0 0 20px rgba(166,255,0,0.4); }
+    .btn-ghost { background:transparent;color:var(--text);font-family:'Syne',sans-serif;font-weight:600;letter-spacing:0.05em;padding:10px 20px;border:1px solid var(--border);cursor:pointer;transition:all 0.2s ease; }
+    .btn-ghost:hover { border-color:var(--accent);color:var(--accent); }
+
+    footer { border-top: 1px solid var(--border); }
+    ::-webkit-scrollbar { width:4px; }
+    ::-webkit-scrollbar-track { background:var(--bg); }
+    ::-webkit-scrollbar-thumb { background:var(--accent); }
+
+    /* Category indicator */
+    .cat-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+
+    /* Rating bar */
+    .rating-bar {
+      height: 3px;
+      background: var(--surface-2);
+      flex: 1;
+    }
+    .rating-fill {
+      height: 100%;
+      background: var(--accent);
+    }
+
+    /* Hover shine */
+    .tool-card::after {
+      content: '';
+      position: absolute;
+      top: -50%; left: -60%;
+      width: 40%; height: 200%;
+      background: linear-gradient(90deg, transparent, rgba(166,255,0,0.04), transparent);
+      transform: skewX(-20deg);
+      transition: left 0.6s ease;
+    }
+    .tool-card:hover::after { left: 120%; }
+
+    body::before { content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9997;opacity:0.4; }
+  </style>
+</head>
+<body>
+
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+      <a href="index.html" class="font-display text-2xl text-[var(--accent)] tracking-widest">HEYTYOM</a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="index.html"   class="nav-link">Home</a>
+        <a href="tools.html"   class="nav-link active">Tools</a>
+        <a href="blog.html"    class="nav-link">Blog</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </div>
+      <a href="https://instagram.com/heytyom" target="_blank" class="hidden md:flex items-center gap-2 btn-accent text-sm" style="padding:10px 20px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        @heytyom
+      </a>
+      <button class="md:hidden text-[var(--accent)]" onclick="document.getElementById('mobileMenu').classList.toggle('hidden')">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden border-t border-[var(--border)] px-6 py-4 flex flex-col gap-4">
+      <a href="index.html"   class="nav-link">Home</a>
+      <a href="tools.html"   class="nav-link active">Tools</a>
+      <a href="blog.html"    class="nav-link">Blog</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="relative pt-16 overflow-hidden">
+    <div class="grid-bg"></div>
+    <div class="glow-blob w-80 h-80 bg-[var(--accent)] -top-20 right-1/4"></div>
+    <div class="max-w-7xl mx-auto px-6 py-20 relative z-10">
+      <div class="max-w-3xl">
+        <div class="font-mono text-xs text-[var(--accent)] tracking-widest uppercase mb-4" data-aos="fade-up">// AI Resources</div>
+        <h1 class="font-display text-7xl lg:text-9xl glow-text mb-6" data-aos="fade-up" data-aos-delay="100">AI TOOLS</h1>
+        <p class="text-[var(--muted)] text-lg max-w-xl leading-relaxed" data-aos="fade-up" data-aos-delay="200">
+          Every tool here has been personally tested in real workflows. No fluff — just the AI stack that actually moves the needle.
+        </p>
+      </div>
+
+      <!-- Stats row -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-14 pt-14 border-t border-[var(--border)]" data-aos="fade-up" data-aos-delay="300">
+        <div>
+          <div class="font-display text-5xl text-[var(--accent)]">24</div>
+          <div class="font-mono text-xs text-[var(--muted)] mt-1 uppercase tracking-widest">Tools Reviewed</div>
+        </div>
+        <div>
+          <div class="font-display text-5xl text-[var(--accent)]">8</div>
+          <div class="font-mono text-xs text-[var(--muted)] mt-1 uppercase tracking-widest">Categories</div>
+        </div>
+        <div>
+          <div class="font-display text-5xl text-[var(--accent)]">14</div>
+          <div class="font-mono text-xs text-[var(--muted)] mt-1 uppercase tracking-widest">Free Options</div>
+        </div>
+        <div>
+          <div class="font-display text-5xl text-[var(--accent)]">∞</div>
+          <div class="font-mono text-xs text-[var(--muted)] mt-1 uppercase tracking-widest">Use Cases</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FILTER BAR -->
+  <section class="max-w-7xl mx-auto px-6 py-8">
+    <div class="flex flex-wrap gap-3 items-center">
+      <span class="font-mono text-xs text-[var(--muted)] mr-2">FILTER:</span>
+      <span class="tag active" onclick="filterTools('all', this)">All</span>
+      <span class="tag" onclick="filterTools('writing', this)">#writing</span>
+      <span class="tag" onclick="filterTools('image-gen', this)">#image-gen</span>
+      <span class="tag" onclick="filterTools('productivity', this)">#productivity</span>
+      <span class="tag" onclick="filterTools('video', this)">#video</span>
+      <span class="tag" onclick="filterTools('coding', this)">#coding</span>
+      <span class="tag" onclick="filterTools('audio', this)">#audio</span>
+      <span class="tag" onclick="filterTools('research', this)">#research</span>
+    </div>
+  </section>
+
+  <!-- ═══ FEATURED TOOL ═══ -->
+  <section class="max-w-7xl mx-auto px-6 pb-10">
+    <div class="tool-card p-0 overflow-hidden" data-aos="fade-up">
+      <div class="grid lg:grid-cols-2">
+        <div class="bg-gradient-to-br from-[#0d1a00] via-[#0a0a0a] to-[var(--bg)] flex items-center justify-center py-16 px-8 border-r border-[var(--border)]">
+          <div class="text-center">
+            <div class="text-8xl mb-4">🤖</div>
+            <div class="font-display text-5xl text-[var(--accent)] tracking-widest">CLAUDE</div>
+            <div class="font-mono text-xs text-[var(--muted)] mt-2">by Anthropic</div>
+          </div>
+        </div>
+        <div class="p-10">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="badge-featured">⭐ EDITOR'S PICK</span>
+            <span class="badge-free">FREE TIER</span>
+            <span class="badge-paid">PRO $20/mo</span>
+          </div>
+          <h2 class="font-heading font-bold text-3xl mb-4">Claude by Anthropic</h2>
+          <p class="text-[var(--muted)] text-sm leading-relaxed mb-6">
+            The most nuanced AI assistant available today. Exceptional for long-form writing, complex analysis, coding, and creative work. Best-in-class for following detailed instructions and maintaining context. HeyTyom's #1 daily driver.
+          </p>
+          <div class="space-y-3 mb-8">
+            <div class="flex items-center gap-3">
+              <span class="font-mono text-xs text-[var(--muted)] w-28">Reasoning</span>
+              <div class="rating-bar"><div class="rating-fill" style="width:96%"></div></div>
+              <span class="font-mono text-xs text-[var(--accent)]">9.6</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="font-mono text-xs text-[var(--muted)] w-28">Writing</span>
+              <div class="rating-bar"><div class="rating-fill" style="width:98%"></div></div>
+              <span class="font-mono text-xs text-[var(--accent)]">9.8</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="font-mono text-xs text-[var(--muted)] w-28">Ease of Use</span>
+              <div class="rating-bar"><div class="rating-fill" style="width:92%"></div></div>
+              <span class="font-mono text-xs text-[var(--accent)]">9.2</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-3 mb-8">
+            <span class="tag">#writing</span>
+            <span class="tag">#coding</span>
+            <span class="tag">#research</span>
+            <span class="tag">#productivity</span>
+          </div>
+          <a href="https://claude.ai" target="_blank"><button class="btn-accent">Try Claude Free →</button></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TOOL GRID ═══ -->
+  <section class="max-w-7xl mx-auto px-6 pb-28">
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="toolGrid">
+
+      <!-- Tool: ChatGPT -->
+      <div class="tool-card p-7" data-category="writing coding research productivity" data-aos="fade-up" data-aos-delay="50">
+        <div class="flex items-start justify-between mb-5">
+          <div class="w-14 h-14 bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-center text-3xl">💬</div>
+          <span class="badge-paid">$20/mo</span>
+        </div>
+        <h3 class="font-heading font-bold text-xl mb-2">ChatGPT</h3>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-5">The OG. Best ecosystem, massive plugin library, and GPT-4o is genuinely excellent for multimodal tasks.</p>
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="tag">#writing</span><span class="tag">#coding</span><span class="tag">#research</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="stars">★★★★★</div>
+          <a href="https://chat.openai.com" target="_blank"><button class="btn-accent text-xs">Try It →</button></a>
+        </div>
+      </div>
+
+      <!-- Tool: Midjourney -->
+      <div class="tool-card p-7" data-category="image-gen" data-aos="fade-up" data-aos-delay="100">
+        <div class="flex items-start justify-between mb-5">
+          <div class="w-14 h-14 bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-center text-3xl">🎨</div>
+          <span class="badge-paid">$10/mo</span>
+        </div>
+        <h3 class="font-heading font-bold text-xl mb-2">Midjourney</h3>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-5">Still the king of aesthetic quality. Unmatched for cinematic, editorial, and concept art generation.</p>
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="tag">#image-gen</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="stars">★★★★★</div>
+          <a href="https://midjourney.com" target="_blank"><button class="btn-accent text-xs">Try It →</button></a>
+        </div>
+      </div>
+
+      <!-- Tool: Gemini -->
+      <div class="tool-card p-7" data-category="writing research productivity" data-aos="fade-up" data-aos-delay="150">
+        <div class="flex items-start justify-between mb-5">
+          <div class="w-14 h-14 bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-center text-3xl">✨</div>
+          <span class="badge-free">FREE</span>
+        </div>
+        <h3 class="font-heading font-bold text-xl mb-2">Google Gemini</h3>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-5">Google's powerhouse. Best for real-time web search integration and multimodal analysis. Gemini 2.0 is a game-changer.</p>
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="tag">#research</span><span class="tag">#writing</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="stars">★★★★☆</div>
+          <a href="https://gemini.google.com" target="_blank"><button class="btn-accent text-xs">Try It →</button></a>
+        </div>
+      </div>
+
+      <!-- Tool: Runway -->
+      <div class="tool-card p-7" data-category="video image-gen" data-aos="fade-up" data-aos-delay="100">
+        <div class="flex items-start justify-between mb-5">
+          <div class="w-14 h-14 bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-center text-3xl">🎬</div>
+          <span class="badge-paid">$12/mo</span>
+        </div>
+        <h3 class="font-heading font-bold text-xl mb-2">Runway Gen-3</h3>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-5">AI video generation that's actually usable. Text-to-video and image-to-video at professional quality.</p>
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="tag">#video</span><span class="tag">#image-gen</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="stars">★★★★☆</div>
+          <a href="https://runwayml.com" target="_blank"><button class="btn-accent text-xs">Try It →</button></a>
+        </div>
+      </div>
+
+      <!-- Tool: Perplexity -->
+      <div class="tool-card p-7" data-category="research productivity" data-aos="fade-up" data-aos-delay="150">
+        <div class="flex items-start justify-between mb-5">
+          <div class="w-14 h-14 bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-center text-3xl">🔍</div>
+          <span class="badge-free">FREE TIER</span>
+        </div>
+        <h3 class="font-heading font-bold text-xl mb-2">Perplexity AI</h3>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-5">The AI search engine. Real-time web results + source citations. Replaced traditional search for deep research tasks.</p>
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="tag">#research</span><span class="tag">#productivity</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="stars">★★★★★</div>
+          <a href="https://perplexity.ai" target="_blank"><button class="btn-accent text-xs">Try It →</button></a>
+        </div>
+      </div>
+
+      <!-- Tool: Cursor -->
+      <div class="tool-card p-7" data-category="coding productivity" data-aos="fade-up" data-aos-delay="200">
+        <div class="flex items-start justify-between mb-5">
+          <div class="w-14 h-14 bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-center text-3xl">⌨️</div>
+          <span class="badge-free">FREE TIER</span>
+        </div>
+        <h3 class="font-heading font-bold text-xl mb-2">Cursor AI</h3>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-5">VS Code + AI superpowers. Write entire features with a single prompt. The IDE that thinks alongside you.</p>
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="tag">#coding</span><span class="tag">#productivity</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="stars">★★★★★</div>
+          <a href="https://cursor.sh" target="_blank"><button class="btn-accent text-xs">Try It →</button></a>
+        </div>
+      </div>
+
+      <!-- Tool: ElevenLabs -->
+      <div class="tool-card p-7" data-category="audio" data-aos="fade-up" data-aos-delay="100">
+        <div class="flex items-start justify-between mb-5">
+          <div class="w-14 h-14 bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-center text-3xl">🎙️</div>
+          <span class="badge-free">FREE TIER</span>
+        </div>
+        <h3 class="font-heading font-bold text-xl mb-2">ElevenLabs</h3>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-5">Voice cloning and text-to-speech so realistic it's borderline unsettling. Best for podcast, narration, and dubbing workflows.</p>
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="tag">#audio</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="stars">★★★★★</div>
+          <a href="https://elevenlabs.io" target="_blank"><button class="btn-accent text-xs">Try It →</button></a>
+        </div>
+      </div>
+
+      <!-- Tool: Notion AI -->
+      <div class="tool-card p-7" data-category="productivity writing" data-aos="fade-up" data-aos-delay="150">
+        <div class="flex items-start justify-between mb-5">
+          <div class="w-14 h-14 bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-center text-3xl">📋</div>
+          <span class="badge-paid">$16/mo</span>
+        </div>
+        <h3 class="font-heading font-bold text-xl mb-2">Notion AI</h3>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-5">Best AI integration inside an existing workflow tool. Connect databases, auto-summarize meetings, and draft content in-context.</p>
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="tag">#productivity</span><span class="tag">#writing</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="stars">★★★★☆</div>
+          <a href="https://notion.so" target="_blank"><button class="btn-accent text-xs">Try It →</button></a>
+        </div>
+      </div>
+
+      <!-- Tool: InVideo AI -->
+      <div class="tool-card p-7" data-category="video productivity" data-aos="fade-up" data-aos-delay="200">
+        <div class="flex items-start justify-between mb-5">
+          <div class="w-14 h-14 bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-center text-3xl">📱</div>
+          <span class="badge-free">FREE TIER</span>
+        </div>
+        <h3 class="font-heading font-bold text-xl mb-2">InVideo AI</h3>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-5">All-in-one video creation. Script → voiceover → footage → captions. Best for Instagram Reels and YouTube Shorts automation.</p>
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="tag">#video</span><span class="tag">#productivity</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="stars">★★★★☆</div>
+          <a href="https://invideo.io" target="_blank"><button class="btn-accent text-xs">Try It →</button></a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Load more -->
+    <div class="text-center mt-12" data-aos="fade-up">
+      <button class="btn-ghost">Load More Tools</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="max-w-7xl mx-auto px-6 py-12">
+    <div class="grid md:grid-cols-4 gap-10 mb-10">
+      <div class="md:col-span-2">
+        <div class="font-display text-3xl text-[var(--accent)] tracking-widest mb-3">HEYTYOM</div>
+        <p class="text-[var(--muted)] text-sm leading-relaxed max-w-sm">AI · Tech · Stories — Armenian-language tech media at the edge of innovation.</p>
+      </div>
+      <div>
+        <div class="font-mono text-xs text-[var(--muted)] tracking-widest uppercase mb-4">Pages</div>
+        <div class="space-y-2">
+          <a href="index.html"   class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">Home</a>
+          <a href="tools.html"   class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">AI Tools</a>
+          <a href="blog.html"    class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">Blog</a>
+          <a href="contact.html" class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="font-mono text-xs text-[var(--muted)] tracking-widest uppercase mb-4">Connect</div>
+        <div class="space-y-2">
+          <a href="https://instagram.com/heytyom" target="_blank" class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">Instagram</a>
+          <a href="https://heytyom.am" target="_blank" class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">heytyom.am</a>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-[var(--border)] pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="font-mono text-xs text-[var(--muted)]">© 2025 HeyTyom Media Group. All rights reserved.</div>
+      <div class="font-mono text-xs text-[var(--muted)]">Built for the future. 🇦🇲</div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ once: true, easing: 'ease-out-cubic', duration: 700 });
+
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursor-ring');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX - 6 + 'px';
+      cursor.style.top  = e.clientY - 6 + 'px';
+      ring.style.left   = e.clientX - 20 + 'px';
+      ring.style.top    = e.clientY - 20 + 'px';
+    });
+    document.querySelectorAll('a,button').forEach(el => {
+      el.addEventListener('mouseenter', () => { cursor.style.transform='scale(2.5)'; ring.style.transform='scale(1.4)'; });
+      el.addEventListener('mouseleave', () => { cursor.style.transform='scale(1)';   ring.style.transform='scale(1)'; });
+    });
+
+    function filterTools(cat, el) {
+      document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      document.querySelectorAll('#toolGrid .tool-card').forEach(card => {
+        if (cat === 'all' || card.dataset.category?.includes(cat)) {
+          card.style.display = '';
+          card.style.opacity = '1';
+        } else {
+          card.style.opacity = '0.15';
+          card.style.transform = 'scale(0.98)';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — HeyTyom</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --accent: #a6ff00;
+      --bg: #000000;
+      --surface: #0d0d0d;
+      --surface-2: #151515;
+      --border: #222222;
+      --text: #f0f0f0;
+      --muted: #666666;
+    }
+    * { margin:0;padding:0;box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;cursor:none;overflow-x:hidden; }
+    #cursor { width:12px;height:12px;background:var(--accent);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transition:transform 0.1s ease;mix-blend-mode:difference; }
+    #cursor-ring { width:40px;height:40px;border:1px solid var(--accent);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transition:all 0.15s ease;opacity:0.5; }
+    .grid-bg { position:absolute;inset:0;background-image:linear-gradient(rgba(166,255,0,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(166,255,0,0.04) 1px,transparent 1px);background-size:60px 60px; }
+    .glow-blob { position:absolute;border-radius:50%;filter:blur(120px);opacity:0.12;animation:floatBlob 8s ease-in-out infinite alternate; }
+    @keyframes floatBlob { from{transform:translate(0,0)}to{transform:translate(20px,-15px)} }
+    .font-display { font-family:'Bebas Neue',sans-serif; }
+    .font-heading  { font-family:'Syne',sans-serif; }
+    .font-mono     { font-family:'DM Mono',monospace; }
+    .glow-text { text-shadow:0 0 20px rgba(166,255,0,0.5),0 0 60px rgba(166,255,0,0.2); }
+    nav { position:fixed;top:0;width:100%;z-index:100;border-bottom:1px solid var(--border);backdrop-filter:blur(20px);background:rgba(0,0,0,0.7); }
+    .nav-link { position:relative;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s; }
+    .nav-link::after { content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--accent);transition:width 0.3s ease; }
+    .nav-link:hover { color:var(--text); }
+    .nav-link:hover::after { width:100%; }
+    .nav-link.active { color:var(--accent); }
+    .nav-link.active::after { width:100%; }
+    .btn-accent { background:var(--accent);color:#000;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.05em;padding:14px 32px;border:none;cursor:pointer;transition:all 0.2s ease;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px)); }
+    .btn-accent:hover { background:#fff;box-shadow:0 0 30px rgba(166,255,0,0.4);transform:translateY(-2px); }
+    ::-webkit-scrollbar { width:4px; }
+    ::-webkit-scrollbar-track { background:var(--bg); }
+    ::-webkit-scrollbar-thumb { background:var(--accent); }
+    footer { border-top:1px solid var(--border); }
+    body::before { content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9997;opacity:0.4; }
+
+    /* Form styles */
+    .form-field {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      padding: 16px 20px;
+      outline: none;
+      transition: all 0.3s ease;
+      appearance: none;
+    }
+    .form-field:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(166,255,0,0.2), inset 0 0 20px rgba(166,255,0,0.02);
+    }
+    .form-field::placeholder { color: var(--muted); font-family: 'DM Sans', sans-serif; }
+
+    /* Form label */
+    .form-label {
+      display: block;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    /* Social link card */
+    .social-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: var(--text);
+      position: relative;
+      overflow: hidden;
+    }
+    .social-card::before {
+      content: '';
+      position: absolute; top:0;left:0;right:0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      transform: scaleX(0);
+      transition: transform 0.4s ease;
+    }
+    .social-card:hover::before { transform: scaleX(1); }
+    .social-card:hover {
+      border-color: rgba(166,255,0,0.25);
+      transform: translateX(4px);
+    }
+    .social-icon {
+      width: 48px; height: 48px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+      transition: all 0.3s;
+    }
+    .social-card:hover .social-icon {
+      border-color: var(--accent);
+      background: rgba(166,255,0,0.1);
+    }
+
+    /* Corner decorations */
+    .corner-tl { position: relative; }
+    .corner-tl::before {
+      content: '';
+      position: absolute; top:0; left:0;
+      width:24px; height:24px;
+      border-top: 2px solid var(--accent);
+      border-left: 2px solid var(--accent);
+    }
+    .corner-br::after {
+      content: '';
+      position: absolute; bottom:0; right:0;
+      width:24px; height:24px;
+      border-bottom: 2px solid var(--accent);
+      border-right: 2px solid var(--accent);
+    }
+
+    /* Availability badge */
+    .availability {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid rgba(166,255,0,0.3);
+      background: rgba(166,255,0,0.05);
+      padding: 10px 18px;
+    }
+
+    /* Radio-style select */
+    .topic-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.05em;
+    }
+    .topic-btn:hover, .topic-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(166,255,0,0.05);
+    }
+
+    /* Success state */
+    #successMsg {
+      display: none;
+      background: rgba(166,255,0,0.08);
+      border: 1px solid rgba(166,255,0,0.3);
+      padding: 24px;
+      text-align: center;
+    }
+
+    /* Animated border */
+    @keyframes borderGlow {
+      0%,100% { box-shadow: 0 0 0 rgba(166,255,0,0); }
+      50% { box-shadow: 0 0 30px rgba(166,255,0,0.15); }
+    }
+    .form-wrapper:focus-within {
+      animation: borderGlow 2s ease infinite;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+      <a href="index.html" class="font-display text-2xl text-[var(--accent)] tracking-widest">HEYTYOM</a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="index.html"   class="nav-link">Home</a>
+        <a href="tools.html"   class="nav-link">Tools</a>
+        <a href="blog.html"    class="nav-link">Blog</a>
+        <a href="contact.html" class="nav-link active">Contact</a>
+      </div>
+      <a href="https://instagram.com/heytyom" target="_blank" class="hidden md:flex items-center gap-2 btn-accent text-sm" style="padding:10px 20px; clip-path:none;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        @heytyom
+      </a>
+      <button class="md:hidden text-[var(--accent)]" onclick="document.getElementById('mobileMenu').classList.toggle('hidden')">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden border-t border-[var(--border)] px-6 py-4 flex flex-col gap-4">
+      <a href="index.html"   class="nav-link">Home</a>
+      <a href="tools.html"   class="nav-link">Tools</a>
+      <a href="blog.html"    class="nav-link">Blog</a>
+      <a href="contact.html" class="nav-link active">Contact</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="relative pt-16 overflow-hidden">
+    <div class="grid-bg"></div>
+    <div class="glow-blob w-96 h-96 bg-[var(--accent)] top-0 right-0"></div>
+    <div class="max-w-7xl mx-auto px-6 py-20 relative z-10">
+      <div class="max-w-3xl">
+        <div class="font-mono text-xs text-[var(--accent)] tracking-widest uppercase mb-4" data-aos="fade-up">// Get In Touch</div>
+        <h1 class="font-display text-7xl lg:text-9xl glow-text mb-6" data-aos="fade-up" data-aos-delay="100">CONTACT</h1>
+        <p class="text-[var(--muted)] text-lg max-w-xl leading-relaxed mb-8" data-aos="fade-up" data-aos-delay="200">
+          Collaboration, sponsorships, content questions, or just a good conversation about AI — drop a message and let's connect.
+        </p>
+        <!-- Availability badge -->
+        <div class="availability" data-aos="fade-up" data-aos-delay="300">
+          <span class="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse flex-shrink-0"></span>
+          <span class="font-mono text-xs text-[var(--accent)] tracking-widest uppercase">Available for Collaborations</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ MAIN CONTENT ═══ -->
+  <section class="max-w-7xl mx-auto px-6 pb-28">
+    <div class="grid lg:grid-cols-5 gap-12">
+
+      <!-- LEFT: Contact form -->
+      <div class="lg:col-span-3" data-aos="fade-right">
+        <div class="font-mono text-xs text-[var(--muted)] tracking-widest uppercase mb-8">// Send a Message</div>
+
+        <div class="form-wrapper corner-tl corner-br relative border border-[var(--border)] p-8 bg-[var(--surface)]">
+
+          <!-- Topic selection -->
+          <div class="mb-8">
+            <label class="form-label">Topic</label>
+            <div class="flex flex-wrap gap-2">
+              <button class="topic-btn active" onclick="selectTopic(this)">Collaboration</button>
+              <button class="topic-btn" onclick="selectTopic(this)">Sponsorship</button>
+              <button class="topic-btn" onclick="selectTopic(this)">Content Question</button>
+              <button class="topic-btn" onclick="selectTopic(this)">Other</button>
+            </div>
+          </div>
+
+          <!-- Form fields -->
+          <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <label class="form-label" for="firstName">First Name</label>
+              <input type="text" id="firstName" class="form-field" placeholder="Armen" />
+            </div>
+            <div>
+              <label class="form-label" for="lastName">Last Name</label>
+              <input type="text" id="lastName" class="form-field" placeholder="Hakobyan" />
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <label class="form-label" for="email">Email Address</label>
+            <input type="email" id="email" class="form-field" placeholder="armen@example.com" />
+          </div>
+
+          <div class="mb-6">
+            <label class="form-label" for="company">Company / Brand <span class="text-[var(--muted)] normal-case" style="letter-spacing:0">(optional)</span></label>
+            <input type="text" id="company" class="form-field" placeholder="Your company or brand" />
+          </div>
+
+          <div class="mb-8">
+            <label class="form-label" for="message">Message</label>
+            <textarea id="message" rows="5" class="form-field resize-none" placeholder="Tell me about your project, idea, or question..."></textarea>
+          </div>
+
+          <!-- Submit -->
+          <div class="flex items-center justify-between flex-wrap gap-4">
+            <p class="font-mono text-xs text-[var(--muted)]">
+              <!-- API endpoint ready: action="https://api.heytyom.am/contact" method="POST" -->
+              Response within 24–48 hours.
+            </p>
+            <button class="btn-accent" id="submitBtn" onclick="handleSubmit()">
+              Send Message →
+            </button>
+          </div>
+
+          <!-- Success message -->
+          <div id="successMsg" class="mt-6">
+            <div class="font-display text-3xl text-[var(--accent)] mb-2">MESSAGE SENT ✓</div>
+            <div class="text-[var(--muted)] text-sm">I'll get back to you within 24–48 hours. Check your inbox.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Info + Socials -->
+      <div class="lg:col-span-2 flex flex-col gap-8" data-aos="fade-left">
+
+        <!-- Creator card -->
+        <div class="border border-[var(--border)] bg-[var(--surface)] p-8">
+          <div class="flex items-center gap-5 mb-6">
+            <div class="w-16 h-16 rounded-full bg-[var(--accent)] flex items-center justify-center font-display text-2xl text-black flex-shrink-0">HT</div>
+            <div>
+              <div class="font-heading font-bold text-xl">HeyTyom</div>
+              <div class="font-mono text-xs text-[var(--muted)] mt-1">AI & Tech Creator</div>
+              <div class="font-mono text-xs text-[var(--muted)]">Yerevan, Armenia 🇦🇲</div>
+            </div>
+          </div>
+          <p class="text-[var(--muted)] text-sm leading-relaxed mb-6">
+            Building the #1 Armenian-language AI content brand. Open to partnerships, brand integrations, and creative collaborations with tech companies and startups.
+          </p>
+          <div class="border-t border-[var(--border)] pt-6">
+            <div class="font-mono text-xs text-[var(--muted)] uppercase tracking-widest mb-4">Response Time</div>
+            <div class="flex items-center gap-3">
+              <div class="flex-1 h-1 bg-[var(--surface-2)]">
+                <div class="h-full bg-[var(--accent)]" style="width:80%"></div>
+              </div>
+              <span class="font-mono text-xs text-[var(--accent)]">~24h</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Social links -->
+        <div>
+          <div class="font-mono text-xs text-[var(--muted)] tracking-widest uppercase mb-4">// Social Links</div>
+          <div class="flex flex-col gap-3">
+
+            <a href="https://instagram.com/heytyom" target="_blank" class="social-card">
+              <div class="social-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </div>
+              <div>
+                <div class="font-heading font-semibold text-sm">Instagram</div>
+                <div class="font-mono text-xs text-[var(--muted)]">@heytyom · 909 followers</div>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" class="ml-auto"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+
+            <a href="https://heytyom.am" target="_blank" class="social-card">
+              <div class="social-icon">🌐</div>
+              <div>
+                <div class="font-heading font-semibold text-sm">Website</div>
+                <div class="font-mono text-xs text-[var(--muted)]">heytyom.am</div>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" class="ml-auto"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+
+            <a href="mailto:hello@heytyom.am" class="social-card">
+              <div class="social-icon">✉️</div>
+              <div>
+                <div class="font-heading font-semibold text-sm">Email</div>
+                <div class="font-mono text-xs text-[var(--muted)]">hello@heytyom.am</div>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" class="ml-auto"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+
+          </div>
+        </div>
+
+        <!-- What I'm open to -->
+        <div class="border border-[var(--border)] bg-[var(--surface)] p-6">
+          <div class="font-mono text-xs text-[var(--muted)] tracking-widest uppercase mb-5">// Open For</div>
+          <div class="space-y-3">
+            <div class="flex items-center gap-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent)] flex-shrink-0"></span>
+              <span class="text-sm text-[var(--muted)]">Brand partnerships & sponsored content</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent)] flex-shrink-0"></span>
+              <span class="text-sm text-[var(--muted)]">AI tool reviews & demos</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent)] flex-shrink-0"></span>
+              <span class="text-sm text-[var(--muted)]">Podcast & media appearances</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent)] flex-shrink-0"></span>
+              <span class="text-sm text-[var(--muted)]">Content strategy consulting</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent)] flex-shrink-0"></span>
+              <span class="text-sm text-[var(--muted)]">Speaking & workshops</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ BIG CTA ═══ -->
+  <section class="relative overflow-hidden py-24">
+    <div class="grid-bg"></div>
+    <div class="glow-blob w-96 h-96 bg-[var(--accent)] top-0 left-1/2 -translate-x-1/2"></div>
+    <div class="max-w-3xl mx-auto px-6 text-center relative z-10">
+      <h2 class="font-display text-7xl lg:text-9xl glow-text mb-4" data-aos="fade-up">LET'S<br/>BUILD</h2>
+      <p class="text-[var(--muted)] text-lg mb-8" data-aos="fade-up" data-aos-delay="100">The Armenian AI media space is wide open. Let's shape what it becomes.</p>
+      <a href="https://instagram.com/heytyom" target="_blank" data-aos="fade-up" data-aos-delay="200">
+        <button class="btn-accent text-lg" style="padding:18px 48px;">Follow the Journey</button>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="max-w-7xl mx-auto px-6 py-12">
+    <div class="grid md:grid-cols-4 gap-10 mb-10">
+      <div class="md:col-span-2">
+        <div class="font-display text-3xl text-[var(--accent)] tracking-widest mb-3">HEYTYOM</div>
+        <p class="text-[var(--muted)] text-sm leading-relaxed max-w-sm">AI · Tech · Stories — Armenian-language tech media at the edge of innovation.</p>
+      </div>
+      <div>
+        <div class="font-mono text-xs text-[var(--muted)] tracking-widest uppercase mb-4">Pages</div>
+        <div class="space-y-2">
+          <a href="index.html"   class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">Home</a>
+          <a href="tools.html"   class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">AI Tools</a>
+          <a href="blog.html"    class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">Blog</a>
+          <a href="contact.html" class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="font-mono text-xs text-[var(--muted)] tracking-widest uppercase mb-4">Connect</div>
+        <div class="space-y-2">
+          <a href="https://instagram.com/heytyom" target="_blank" class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">Instagram</a>
+          <a href="https://heytyom.am" target="_blank" class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">heytyom.am</a>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-[var(--border)] pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="font-mono text-xs text-[var(--muted)]">© 2025 HeyTyom Media Group. All rights reserved.</div>
+      <div class="font-mono text-xs text-[var(--muted)]">Built for the future. 🇦🇲</div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ once:true, easing:'ease-out-cubic', duration:700 });
+
+    const cursor = document.getElementById('cursor');
+    const ring   = document.getElementById('cursor-ring');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX-6+'px'; cursor.style.top = e.clientY-6+'px';
+      ring.style.left   = e.clientX-20+'px'; ring.style.top  = e.clientY-20+'px';
+    });
+    document.querySelectorAll('a,button,input,textarea').forEach(el => {
+      el.addEventListener('mouseenter', () => { cursor.style.transform='scale(2.5)'; ring.style.transform='scale(1.4)'; });
+      el.addEventListener('mouseleave', () => { cursor.style.transform='scale(1)'; ring.style.transform='scale(1)'; });
+    });
+
+    function selectTopic(btn) {
+      document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function handleSubmit() {
+      const name    = document.getElementById('firstName').value;
+      const email   = document.getElementById('email').value;
+      const message = document.getElementById('message').value;
+      if (!name || !email || !message) {
+        alert('Please fill in your name, email, and message.');
+        return;
+      }
+      // API endpoint ready — replace with actual fetch call:
+      // fetch('https://api.heytyom.am/contact', { method:'POST', body: JSON.stringify({name,email,message}), headers:{'Content-Type':'application/json'} })
+      document.getElementById('submitBtn').style.display = 'none';
+      document.getElementById('successMsg').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
