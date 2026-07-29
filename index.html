@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +8,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
   <style>
     :root {
       --accent: #a6ff00;
@@ -20,8 +23,15 @@
       --muted: #666666;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       background: var(--bg);
@@ -33,42 +43,55 @@
 
     /* Custom cursor */
     #cursor {
-      width: 12px; height: 12px;
+      width: 12px;
+      height: 12px;
       background: var(--accent);
       border-radius: 50%;
-      position: fixed; top: 0; left: 0;
-      pointer-events: none; z-index: 9999;
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
       transition: transform 0.1s ease;
       mix-blend-mode: difference;
     }
+
     #cursor-ring {
-      width: 40px; height: 40px;
+      width: 40px;
+      height: 40px;
       border: 1px solid var(--accent);
       border-radius: 50%;
-      position: fixed; top: 0; left: 0;
-      pointer-events: none; z-index: 9998;
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9998;
       transition: all 0.15s ease;
       opacity: 0.5;
     }
-    a:hover ~ #cursor, button:hover ~ #cursor { transform: scale(2); }
+
+    a:hover~#cursor,
+    button:hover~#cursor {
+      transform: scale(2);
+    }
 
     /* Grid background */
     .grid-bg {
-      position: absolute; inset: 0;
+      position: absolute;
+      inset: 0;
       background-image:
-        linear-gradient(rgba(166,255,0,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(166,255,0,0.04) 1px, transparent 1px);
+        linear-gradient(rgba(166, 255, 0, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(166, 255, 0, 0.04) 1px, transparent 1px);
       background-size: 60px 60px;
     }
 
     /* Scanline overlay */
     .scanlines::after {
       content: '';
-      position: absolute; inset: 0;
-      background: repeating-linear-gradient(
-        0deg, transparent, transparent 2px,
-        rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px
-      );
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px,
+          rgba(0, 0, 0, 0.08) 2px, rgba(0, 0, 0, 0.08) 4px);
       pointer-events: none;
     }
 
@@ -80,32 +103,57 @@
       opacity: 0.15;
       animation: floatBlob 8s ease-in-out infinite alternate;
     }
+
     @keyframes floatBlob {
-      from { transform: translate(0, 0) scale(1); }
-      to   { transform: translate(30px, -20px) scale(1.1); }
+      from {
+        transform: translate(0, 0) scale(1);
+      }
+
+      to {
+        transform: translate(30px, -20px) scale(1.1);
+      }
     }
 
     /* Typography */
-    .font-display { font-family: 'Bebas Neue', sans-serif; }
-    .font-heading  { font-family: 'Syne', sans-serif; }
-    .font-mono     { font-family: 'DM Mono', monospace; }
+    .font-display {
+      font-family: 'Bebas Neue', sans-serif;
+    }
+
+    .font-heading {
+      font-family: 'Syne', sans-serif;
+    }
+
+    .font-mono {
+      font-family: 'DM Mono', monospace;
+    }
 
     /* Accent color */
-    .text-accent  { color: var(--accent); }
-    .bg-accent    { background: var(--accent); }
-    .border-accent { border-color: var(--accent); }
+    .text-accent {
+      color: var(--accent);
+    }
+
+    .bg-accent {
+      background: var(--accent);
+    }
+
+    .border-accent {
+      border-color: var(--accent);
+    }
 
     /* Neon glow text */
     .glow-text {
-      text-shadow: 0 0 20px rgba(166,255,0,0.5), 0 0 60px rgba(166,255,0,0.2);
+      text-shadow: 0 0 20px rgba(166, 255, 0, 0.5), 0 0 60px rgba(166, 255, 0, 0.2);
     }
 
     /* Nav */
     nav {
-      position: fixed; top: 0; width: 100%; z-index: 100;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
       border-bottom: 1px solid var(--border);
       backdrop-filter: blur(20px);
-      background: rgba(0,0,0,0.7);
+      background: rgba(0, 0, 0, 0.7);
     }
 
     /* Hero title animation */
@@ -120,32 +168,77 @@
     .glitch {
       position: relative;
     }
-    .glitch::before, .glitch::after {
+
+    .glitch::before,
+    .glitch::after {
       content: attr(data-text);
-      position: absolute; top: 0; left: 0;
-      width: 100%; height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
     }
+
     .glitch::before {
       color: #00ffff;
       animation: glitch1 3s infinite;
       clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
     }
+
     .glitch::after {
       color: #ff00ff;
       animation: glitch2 3s infinite;
       clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
     }
+
     @keyframes glitch1 {
-      0%,90%,100% { transform: translate(0); opacity: 0; }
-      92% { transform: translate(-3px, 1px); opacity: 0.8; }
-      94% { transform: translate(3px, -1px); opacity: 0.8; }
-      96% { transform: translate(0); opacity: 0; }
+
+      0%,
+      90%,
+      100% {
+        transform: translate(0);
+        opacity: 0;
+      }
+
+      92% {
+        transform: translate(-3px, 1px);
+        opacity: 0.8;
+      }
+
+      94% {
+        transform: translate(3px, -1px);
+        opacity: 0.8;
+      }
+
+      96% {
+        transform: translate(0);
+        opacity: 0;
+      }
     }
+
     @keyframes glitch2 {
-      0%,90%,100% { transform: translate(0); opacity: 0; }
-      93% { transform: translate(3px, 2px); opacity: 0.8; }
-      95% { transform: translate(-3px, -2px); opacity: 0.8; }
-      97% { transform: translate(0); opacity: 0; }
+
+      0%,
+      90%,
+      100% {
+        transform: translate(0);
+        opacity: 0;
+      }
+
+      93% {
+        transform: translate(3px, 2px);
+        opacity: 0.8;
+      }
+
+      95% {
+        transform: translate(-3px, -2px);
+        opacity: 0.8;
+      }
+
+      97% {
+        transform: translate(0);
+        opacity: 0;
+      }
     }
 
     /* Card hover */
@@ -156,19 +249,25 @@
       position: relative;
       overflow: hidden;
     }
+
     .card::before {
       content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(166,255,0,0.05), transparent);
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(166, 255, 0, 0.05), transparent);
       opacity: 0;
       transition: opacity 0.3s ease;
     }
+
     .card:hover {
-      border-color: rgba(166,255,0,0.4);
+      border-color: rgba(166, 255, 0, 0.4);
       transform: translateY(-4px);
-      box-shadow: 0 20px 60px rgba(166,255,0,0.08);
+      box-shadow: 0 20px 60px rgba(166, 255, 0, 0.08);
     }
-    .card:hover::before { opacity: 1; }
+
+    .card:hover::before {
+      opacity: 1;
+    }
 
     /* Accent button */
     .btn-accent {
@@ -178,13 +277,15 @@
       font-weight: 700;
       letter-spacing: 0.05em;
       padding: 14px 32px;
-      border: none; cursor: pointer;
+      border: none;
+      cursor: pointer;
       transition: all 0.2s ease;
       clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
     }
+
     .btn-accent:hover {
       background: #fff;
-      box-shadow: 0 0 30px rgba(166,255,0,0.4);
+      box-shadow: 0 0 30px rgba(166, 255, 0, 0.4);
       transform: translateY(-2px);
     }
 
@@ -199,6 +300,7 @@
       cursor: pointer;
       transition: all 0.2s ease;
     }
+
     .btn-ghost:hover {
       border-color: var(--accent);
       color: var(--accent);
@@ -229,15 +331,25 @@
     }
 
     /* Marquee */
-    .marquee-wrapper { overflow: hidden; }
+    .marquee-wrapper {
+      overflow: hidden;
+    }
+
     .marquee-track {
-      display: flex; gap: 60px;
+      display: flex;
+      gap: 60px;
       animation: marquee 20s linear infinite;
       white-space: nowrap;
     }
+
     @keyframes marquee {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
     }
 
     /* Footer */
@@ -248,28 +360,46 @@
     /* Noise overlay */
     body::before {
       content: '';
-      position: fixed; inset: 0;
+      position: fixed;
+      inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none; z-index: 9997; opacity: 0.4;
+      pointer-events: none;
+      z-index: 9997;
+      opacity: 0.4;
     }
 
     /* Scroll bar */
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--accent); }
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--accent);
+    }
 
     /* Corner accent */
     .corner-tl::before {
       content: '';
-      position: absolute; top: 0; left: 0;
-      width: 20px; height: 20px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 20px;
+      height: 20px;
       border-top: 2px solid var(--accent);
       border-left: 2px solid var(--accent);
     }
+
     .corner-br::after {
       content: '';
-      position: absolute; bottom: 0; right: 0;
-      width: 20px; height: 20px;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 20px;
+      height: 20px;
       border-bottom: 2px solid var(--accent);
       border-right: 2px solid var(--accent);
     }
@@ -286,33 +416,58 @@
       text-decoration: none;
       transition: color 0.2s;
     }
+
     .nav-link::after {
       content: '';
-      position: absolute; bottom: -4px; left: 0;
-      width: 0; height: 1px;
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
       background: var(--accent);
       transition: width 0.3s ease;
     }
-    .nav-link:hover { color: var(--text); }
-    .nav-link:hover::after { width: 100%; }
-    .nav-link.active { color: var(--accent); }
-    .nav-link.active::after { width: 100%; }
+
+    .nav-link:hover {
+      color: var(--text);
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .nav-link.active {
+      color: var(--accent);
+    }
+
+    .nav-link.active::after {
+      width: 100%;
+    }
 
     /* Feature icon box */
     .icon-box {
-      width: 48px; height: 48px;
+      width: 48px;
+      height: 48px;
       border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 20px;
       background: var(--surface-2);
       transition: all 0.3s;
     }
+
     .card:hover .icon-box {
       border-color: var(--accent);
-      background: rgba(166,255,0,0.1);
+      background: rgba(166, 255, 0, 0.1);
+    }
+
+    .hide {
+      display: none;
     }
   </style>
 </head>
+
 <body>
 
   <!-- Custom Cursor -->
@@ -322,67 +477,79 @@
   <!-- ═══════════════════════════ NAV ═══════════════════════════ -->
   <nav>
     <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
-      <a href="index.html" class="font-display text-2xl text-accent tracking-widest">HEYTYOM</a>
-      <div class="hidden md:flex items-center gap-8">
-        <a href="index.html"   class="nav-link active">Home</a>
-        <a href="tools.html"   class="nav-link">Tools</a>
-        <a href="blog.html"    class="nav-link">Blog</a>
+      <a href="index.html" class="font-display text-2xl  tracking-widest">HEY<span class="text-accent">TYOM</span></a>
+      <!-- <div class="hidden md:flex items-center gap-8">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="tools.html" class="nav-link">Tools</a>
+        <a href="blog.html" class="nav-link">Blog</a>
         <a href="contact.html" class="nav-link">Contact</a>
-      </div>
-      <a href="https://instagram.com/heytyom" target="_blank" class="hidden md:flex items-center gap-2 btn-accent text-sm" style="padding: 10px 20px;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </div> -->
+      <a href="https://instagram.com/heytyom" target="_blank"
+        class="hidden md:flex items-center gap-2 btn-accent text-sm" style="padding: 10px 20px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+        </svg>
         @heytyom
       </a>
       <!-- Mobile menu btn -->
-      <button id="menuBtn" class="md:hidden text-accent" onclick="toggleMenu()">
-        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      <button id="menuBtn" class="md:hidden text-accent hide" onclick="toggleMenu()">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M3 12h18M3 6h18M3 18h18" />
+        </svg>
       </button>
     </div>
     <!-- Mobile menu -->
-    <div id="mobileMenu" class="hidden md:hidden border-t border-[var(--border)] px-6 py-4 flex flex-col gap-4">
-      <a href="index.html"   class="nav-link active">Home</a>
-      <a href="tools.html"   class="nav-link">Tools</a>
-      <a href="blog.html"    class="nav-link">Blog</a>
-      <a href="contact.html" class="nav-link">Contact</a>
+    <div id="mobileMenu" style="display: none;"
+      class="hide md:hidden border-t border-[var(--border)] px-6 py-4 flex flex-col gap-4">
+      <a href="index.html" class="nav-link active hide">Home</a>
+      <a href="tools.html" class="nav-link hide">Tools</a>
+      <a href="blog.html" class="nav-link hide">Blog</a>
+      <a href="contact.html" class="nav-link hide">Contact</a>
     </div>
   </nav>
 
   <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
   <section class="relative min-h-screen flex items-center scanlines overflow-hidden pt-16">
+
     <div class="grid-bg"></div>
+
     <!-- Glow blobs -->
     <div class="glow-blob w-96 h-96 bg-[var(--accent)] top-20 -right-20"></div>
     <div class="glow-blob w-80 h-80 bg-blue-500 bottom-20 -left-20" style="animation-delay:3s"></div>
 
-    <div class="max-w-7xl mx-auto px-6 w-full py-24 relative z-10">
+    <div class="max-w-7xl mx-auto px-6 w-full py-14 relative z-10">
       <div class="grid lg:grid-cols-2 gap-16 items-center">
 
         <!-- Left: Text -->
         <div>
           <!-- Badge -->
-          <div class="inline-flex items-center gap-3 border border-[var(--border)] px-4 py-2 mb-8"
-               data-aos="fade-right" data-aos-duration="600">
+          <div class="inline-flex items-center gap-3 border border-[var(--border)] px-4 py-2 mb-8" data-aos="fade-right"
+            data-aos-duration="600">
             <span class="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse"></span>
             <span class="font-mono text-xs text-[var(--muted)] tracking-widest uppercase">AI · Tech · Stories</span>
           </div>
 
           <!-- Title -->
-          <h1 class="hero-title text-white leading-none mb-6"
-              data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
+          <h1 class="hero-title text-white leading-none mb-6" data-aos="fade-up" data-aos-duration="800"
+            data-aos-delay="100">
+            <span class="block text-[var(--accent)] glow-text glitch" data-text="FUTURE">HEY</span>
             <span class="block">THE</span>
             <span class="block text-[var(--accent)] glow-text glitch" data-text="FUTURE">FUTURE</span>
             <span class="block">IS NOW</span>
           </h1>
 
-          <p class="text-[var(--muted)] text-lg max-w-md mb-10 leading-relaxed"
-             data-aos="fade-up" data-aos-delay="200">
-            AI-powered insights, tool reviews & tech stories — in Armenian & beyond.
-            Explore the edge of what's possible.
+          <p class="text-[var(--muted)] text-lg max-w-md mb-10 leading-relaxed" data-aos="fade-up" data-aos-delay="200">
+            Արհեստական բանականությունը փոխում է աշխարհը։ Մենք ուսումնասիրում ենք նորագույն տեխնոլոգիաները, AI գործիքները
+            և գաղափարները, որոնք ձևավորում են թվային ապագան։
+
+            Այս հարթակը ստեղծված է նրանց համար, ովքեր ցանկանում են հետևել տեխնոլոգիական առաջընթացին և բացահայտել
+            հնարավորի նոր սահմանները։
           </p>
 
           <div class="flex flex-wrap gap-4" data-aos="fade-up" data-aos-delay="300">
-            <a href="blog.html"><button class="btn-accent">Explore Stories</button></a>
-            <a href="tools.html"><button class="btn-ghost">AI Tools →</button></a>
+            <a href="blog.html"><button class="btn-accent hidden">Explore Stories</button></a>
+            <a href="tools.html"><button class="btn-ghost hidden">AI Tools →</button></a>
           </div>
 
           <!-- Tech badges -->
@@ -396,7 +563,7 @@
         </div>
 
         <!-- Right: Visual card stack -->
-        <div class="relative hidden lg:block" data-aos="fade-left" data-aos-duration="1000">
+        <div class="relative hidden lg:block" style="display: none;" data-aos="fade-left" data-aos-duration="1000">
           <!-- Main card -->
           <div class="card p-6 corner-tl corner-br relative" style="border-color: rgba(166,255,0,0.3);">
             <div class="font-mono text-xs text-[var(--muted)] mb-4 flex items-center gap-2">
@@ -404,25 +571,34 @@
               LIVE FEED — AI NEWS
             </div>
             <div class="space-y-4">
-              <div class="flex items-start gap-4 p-3 border border-[var(--border)] hover:border-[rgba(166,255,0,0.3)] transition-colors">
-                <div class="w-10 h-10 bg-[var(--surface-2)] flex items-center justify-center text-xl flex-shrink-0">🤖</div>
+              <div
+                class="flex items-start gap-4 p-3 border border-[var(--border)] hover:border-[rgba(166,255,0,0.3)] transition-colors">
+                <div class="w-10 h-10 bg-[var(--surface-2)] flex items-center justify-center text-xl flex-shrink-0">🤖
+                </div>
                 <div>
                   <div class="font-heading text-sm font-semibold mb-1">GPT-5 Changes Everything</div>
-                  <div class="text-[var(--muted)] text-xs leading-relaxed">Reasoning at human level across all domains...</div>
+                  <div class="text-[var(--muted)] text-xs leading-relaxed">Reasoning at human level across all
+                    domains...</div>
                 </div>
               </div>
-              <div class="flex items-start gap-4 p-3 border border-[var(--border)] hover:border-[rgba(166,255,0,0.3)] transition-colors">
-                <div class="w-10 h-10 bg-[var(--surface-2)] flex items-center justify-center text-xl flex-shrink-0">⚡</div>
+              <div
+                class="flex items-start gap-4 p-3 border border-[var(--border)] hover:border-[rgba(166,255,0,0.3)] transition-colors">
+                <div class="w-10 h-10 bg-[var(--surface-2)] flex items-center justify-center text-xl flex-shrink-0">⚡
+                </div>
                 <div>
                   <div class="font-heading text-sm font-semibold mb-1">Build Faster with AI Agents</div>
-                  <div class="text-[var(--muted)] text-xs leading-relaxed">Autonomous workflows that ship in minutes...</div>
+                  <div class="text-[var(--muted)] text-xs leading-relaxed">Autonomous workflows that ship in minutes...
+                  </div>
                 </div>
               </div>
               <div class="flex items-start gap-4 p-3 border border-[rgba(166,255,0,0.2)] bg-[rgba(166,255,0,0.03)]">
-                <div class="w-10 h-10 bg-[rgba(166,255,0,0.1)] flex items-center justify-center text-xl flex-shrink-0">🧠</div>
+                <div class="w-10 h-10 bg-[rgba(166,255,0,0.1)] flex items-center justify-center text-xl flex-shrink-0">
+                  🧠</div>
                 <div>
-                  <div class="font-heading text-sm font-semibold mb-1 text-[var(--accent)]">NEW: Deep Research Guide</div>
-                  <div class="text-[var(--muted)] text-xs leading-relaxed">Learn to use AI for deep work & analysis...</div>
+                  <div class="font-heading text-sm font-semibold mb-1 text-[var(--accent)]">NEW: Deep Research Guide
+                  </div>
+                  <div class="text-[var(--muted)] text-xs leading-relaxed">Learn to use AI for deep work & analysis...
+                  </div>
                 </div>
               </div>
             </div>
@@ -442,7 +618,9 @@
     <!-- Scroll indicator -->
     <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
       <span class="font-mono text-xs text-[var(--muted)] tracking-widest">SCROLL</span>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2">
+        <path d="M12 5v14M5 12l7 7 7-7" />
+      </svg>
     </div>
   </section>
 
@@ -450,23 +628,35 @@
   <div class="border-y border-[var(--border)] py-4 overflow-hidden bg-[var(--surface)]">
     <div class="marquee-wrapper">
       <div class="marquee-track font-mono text-xs text-[var(--muted)] tracking-widest uppercase">
-        <span>AI Tools &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">Claude</span><span>&nbsp;·&nbsp; Automation &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">ChatGPT</span><span>&nbsp;·&nbsp; Innovation &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">Gemini</span><span>&nbsp;·&nbsp; Deep Research &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">Midjourney</span><span>&nbsp;·&nbsp; AI Ethics &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">Sora</span><span>&nbsp;·&nbsp; Future of Work &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">Agents</span><span>&nbsp;·&nbsp;</span>
+        <span>AI Tools &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">Claude</span><span>&nbsp;·&nbsp;
+          Automation &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">ChatGPT</span><span>&nbsp;·&nbsp; Innovation
+          &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">Gemini</span><span>&nbsp;·&nbsp; Deep Research
+          &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">Midjourney</span><span>&nbsp;·&nbsp; AI Ethics
+          &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">Seedance</span><span>&nbsp;·&nbsp; Future of Work
+          &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">Agents</span><span>&nbsp;·&nbsp;</span>
         <!-- duplicate for seamless loop -->
-        <span>AI Tools &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">Claude</span><span>&nbsp;·&nbsp; Automation &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">ChatGPT</span><span>&nbsp;·&nbsp; Innovation &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">Gemini</span><span>&nbsp;·&nbsp; Deep Research &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">Midjourney</span><span>&nbsp;·&nbsp; AI Ethics &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">Sora</span><span>&nbsp;·&nbsp; Future of Work &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">Agents</span><span>&nbsp;·&nbsp;</span>
+        <span>AI Tools &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">Claude</span><span>&nbsp;·&nbsp;
+          Automation &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">ChatGPT</span><span>&nbsp;·&nbsp; Innovation
+          &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">Gemini</span><span>&nbsp;·&nbsp; Deep Research
+          &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">Midjourney</span><span>&nbsp;·&nbsp; AI Ethics
+          &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">Seedance</span><span>&nbsp;·&nbsp; Future of Work
+          &nbsp;·&nbsp;</span><span class="text-[var(--accent)]">Agents</span><span>&nbsp;·&nbsp;</span>
       </div>
     </div>
   </div>
 
   <!-- ═══════════════════════════ ABOUT TEASER ═══════════════════════════ -->
-  <section class="max-w-7xl mx-auto px-6 py-28">
+  <section class="max-w-7xl mx-auto px-6 pt-20 pb-10   ">
     <div class="grid lg:grid-cols-2 gap-16 items-center">
 
       <!-- Left: Visual -->
-      <div class="relative" data-aos="fade-right">
+      <div class="relative" style="display: none;" data-aos="fade-right hidden">
         <div class="card p-8 relative" style="border-color: rgba(166,255,0,0.2);">
           <!-- Profile -->
           <div class="flex items-center gap-5 mb-8">
-            <div class="w-20 h-20 rounded-full bg-[var(--accent)] flex items-center justify-center font-display text-3xl text-black">HT</div>
+            <div
+              class="w-20 h-20 rounded-full bg-[var(--accent)] flex items-center justify-center font-display text-3xl text-black">
+              HT</div>
             <div>
               <div class="font-heading font-bold text-xl">@heytyom</div>
               <div class="font-mono text-xs text-[var(--muted)] mt-1">AI & Tech Creator · Yerevan</div>
@@ -522,18 +712,30 @@
       </div>
 
       <!-- Right: Copy -->
-      <div data-aos="fade-left">
+      <div data-aos="fade-left ">
         <div class="font-mono text-xs text-[var(--accent)] tracking-widest uppercase mb-4">// About the Creator</div>
         <h2 class="font-heading font-bold text-4xl lg:text-5xl mb-6 leading-tight">
-          Where AI Meets<br/>
+          Where AI Meets<br />
           <span class="text-[var(--accent)]">Human Story</span>
         </h2>
         <p class="text-[var(--muted)] text-base leading-relaxed mb-6">
-          HeyTyom is an Armenian-language tech creator exploring the intersection of artificial intelligence, innovation, and human stories. From practical AI tool demos to deep dives into ethics and automation — every piece of content is built to inform, inspire, and challenge.
+          Բարև, ես Արտյոմն եմ։
+          </br></br>
+          Ես հետաքրքրված եմ արհեստական բանականությամբ, ծրագրավորմամբ և ժամանակակից տեխնոլոգիաներով։ Վերջին տարիներին
+          AI-ն արագ փոխում է մեր սովորելու, աշխատելու և ստեղծագործելու ձևը, և այս հարթակը ստեղծել եմ՝ այդ
+          փոփոխությունները ավելի հասկանալի ու հասանելի դարձնելու համար։
+          </br></br>
+          Այս բլոգում ես ուսումնասիրում եմ արհեստական բանականության նոր գործիքները, կիսվում եմ դրանց
+          հնարավորություններով, ներկայացնում եմ գործնական կիրառություններ և փորձում եմ ցույց տալ, թե ինչպես կարելի է
+          AI-ն օգտագործել սովորելու, ստեղծագործելու և առօրյա խնդիրները ավելի արդյունավետ լուծելու համար։
+          </br></br>
+          Իմ նպատակն է ստեղծել կրթական հարթակ, որտեղ յուրաքանչյուր մարդ՝ անկախ իր տեխնիկական գիտելիքներից, կարող է
+          բացահայտել AI-ի հնարավորությունները, սովորել նոր գործիքներ և հետևել տեխնոլոգիաների զարգացմանը։
         </p>
-        <p class="text-[var(--muted)] text-base leading-relaxed mb-8">
-          Operating at the frontier of a niche with virtually no Armenian-language AI content — bridging Silicon Valley insights with the Armenian tech community.
-        </p>
+        <!-- <p class="text-[var(--muted)] text-base leading-relaxed mb-8">
+          Operating at the frontier of a niche with virtually no Armenian-language AI content — bridging Silicon Valley
+          insights with the Armenian tech community.
+        </p> -->
         <div class="flex flex-wrap gap-3 mb-8">
           <span class="tag">AI Tools</span>
           <span class="tag">Automation</span>
@@ -541,7 +743,7 @@
           <span class="tag">Tech History</span>
           <span class="tag">հայերեն</span>
         </div>
-        <a href="contact.html"><button class="btn-ghost">Get in touch →</button></a>
+        <a href="contact.html"><button class="btn-ghost hidden">Get in touch →</button></a>
       </div>
 
     </div>
@@ -550,73 +752,111 @@
   <div class="divider max-w-7xl mx-auto"></div>
 
   <!-- ═══════════════════════════ FEATURED ═══════════════════════════ -->
-  <section class="max-w-7xl mx-auto px-6 py-28">
+  <section class="max-w-7xl mx-auto px-6 py-20">
     <div class="flex items-end justify-between mb-12">
       <div>
-        <div class="font-mono text-xs text-[var(--accent)] tracking-widest uppercase mb-3" data-aos="fade-up">// Featured Content</div>
-        <h2 class="font-heading font-bold text-4xl lg:text-5xl" data-aos="fade-up" data-aos-delay="100">Latest Stories</h2>
+        <div class="font-mono text-xs text-[var(--accent)] tracking-widest uppercase mb-3" data-aos="fade-up">//
+          Featured Content</div>
+        <h2 class="font-heading font-bold text-4xl lg:text-5xl" data-aos="fade-up" data-aos-delay="100">Latest Stories
+        </h2>
       </div>
-      <a href="blog.html" class="hidden md:block font-mono text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">View all →</a>
+      <a href="blog.html"
+        class="hidden md:block font-mono text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">View
+        all →</a>
     </div>
 
     <div class="grid md:grid-cols-3 gap-6">
       <!-- Card 1 — Featured large -->
-      <div class="card p-6 md:col-span-2 cursor-pointer" data-aos="fade-up" data-aos-delay="100">
-        <div class="flex items-center justify-between mb-6">
-          <div class="tag text-[var(--accent)] border-[rgba(166,255,0,0.3)]">#AI Tools</div>
-          <span class="font-mono text-xs text-[var(--muted)]">APR 2025</span>
+      <a href="https://www.instagram.com/reel/DXEzupJISii/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==">
+        <div class="card p-6 md:col-span-2 cursor-pointer" data-aos="fade-up" data-aos-delay="100">
+          <div class="flex items-center justify-between mb-6">
+            <div class="tag text-[var(--accent)] border-[rgba(166,255,0,0.3)]">#AI Tools</div>
+            <span class="font-mono text-xs text-[var(--muted)]">APR 2025</span>
+          </div>
+          <div
+            class="w-full aspect-video bg-gradient-to-br from-[#0d1a00] to-[var(--surface)] flex items-center justify-center text-5xl mb-6 border border-[var(--border)]">
+            🤖</div>
+          <h3 class="font-heading font-bold text-2xl mb-3">Ինչպե՞ս ստեղծել AI Ավատար</h3>
+          <p class="text-[var(--muted)] text-sm leading-relaxed mb-4 hide">Complete step-by-step guide to building your
+            own
+            AI-powered avatar for content creation, presentations, and automation workflows.</p>
+          <div class="flex items-center gap-3">
+            <span class="tag">#tutorial</span>
+            <span class="tag">#image-gen</span>
+          </div>
         </div>
-        <div class="w-full aspect-video bg-gradient-to-br from-[#0d1a00] to-[var(--surface)] flex items-center justify-center text-5xl mb-6 border border-[var(--border)]">🤖</div>
-        <h3 class="font-heading font-bold text-2xl mb-3">Ինչպե՞ս ստեղծել AI Ավատար — Beginner to Pro</h3>
-        <p class="text-[var(--muted)] text-sm leading-relaxed mb-4">Complete step-by-step guide to building your own AI-powered avatar for content creation, presentations, and automation workflows.</p>
-        <div class="flex items-center gap-3">
-          <span class="tag">#tutorial</span>
-          <span class="tag">#image-gen</span>
-          <span class="font-mono text-xs text-[var(--muted)] ml-auto">8 min read</span>
+      </a>
+      <!-- Card 2 — Featured large -->
+      <a href="https://www.instagram.com/reel/DaFxnlbIOI8/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==">
+        <div class="card p-6 md:col-span-2 cursor-pointer" data-aos="fade-up" data-aos-delay="100">
+          <div class="flex items-center justify-between mb-6">
+            <div class="tag text-[var(--accent)] border-[rgba(166,255,0,0.3)]">#AI Tools</div>
+            <span class="font-mono text-xs text-[var(--muted)]">APR 2026</span>
+          </div>
+          <div
+            class="w-full aspect-video bg-gradient-to-br from-[#0d1a00] to-[var(--surface)] flex items-center justify-center text-5xl mb-6 border border-[var(--border)]">
+            🤖</div>
+          <h3 class="font-heading font-bold text-2xl mb-3">AI Ագենտներ</h3>
+          <p class="text-[var(--muted)] text-sm leading-relaxed mb-4 hide">Complete step-by-step guide to building your
+            own
+            AI-powered avatar for content creation, presentations, and automation workflows.</p>
+          <div class="flex items-center gap-3">
+            <span class="tag">#tutorial</span>
+            <span class="tag">#image-gen</span>
+          </div>
         </div>
-      </div>
-
-      <!-- Cards col -->
-      <div class="flex flex-col gap-6">
-        <div class="card p-6 cursor-pointer" data-aos="fade-up" data-aos-delay="150">
-          <div class="icon-box mb-4">⚡</div>
-          <div class="font-mono text-xs text-[var(--muted)] mb-2">AUTOMATION</div>
-          <h3 class="font-heading font-semibold text-lg mb-2">Claude AI-ով Ավտոմատ Բովանդակություն</h3>
-          <p class="text-[var(--muted)] text-sm">Build an autonomous content pipeline using Claude agents.</p>
+      </a>
+      <!-- Card 3 — Featured large -->
+      <a href="https://www.instagram.com/reel/DYrcEw_I9dD/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==">
+        <div class="card p-6 md:col-span-2 cursor-pointer" data-aos="fade-up" data-aos-delay="100">
+          <div class="flex items-center justify-between mb-6">
+            <div class="tag text-[var(--accent)] border-[rgba(166,255,0,0.3)]">#AI Tools</div>
+            <span class="font-mono text-xs text-[var(--muted)]">APR 2026</span>
+          </div>
+          <div
+            class="w-full aspect-video bg-gradient-to-br from-[#0d1a00] to-[var(--surface)] flex items-center justify-center text-5xl mb-6 border border-[var(--border)]">
+            🤖</div>
+          <h3 class="font-heading font-bold text-2xl mb-3">Նկարների Փրոմփթեր</h3>
+          <p class="text-[var(--muted)] text-sm leading-relaxed mb-4 hide">Complete step-by-step guide to building your
+            own
+            AI-powered avatar for content creation, presentations, and automation workflows.</p>
+          <div class="flex items-center gap-3">
+            <span class="tag">#tutorial</span>
+            <span class="tag">#image-gen</span>
+          </div>
         </div>
-        <div class="card p-6 cursor-pointer" data-aos="fade-up" data-aos-delay="200">
-          <div class="icon-box mb-4">🧠</div>
-          <div class="font-mono text-xs text-[var(--muted)] mb-2">ETHICS</div>
-          <h3 class="font-heading font-semibold text-lg mb-2">Deepfakes — Վտանգ թե Հնարավորություն?</h3>
-          <p class="text-[var(--muted)] text-sm">The ethics of AI-generated faces, voices, and media.</p>
-        </div>
-      </div>
+      </a>
     </div>
   </section>
 
   <div class="divider max-w-7xl mx-auto"></div>
 
   <!-- ═══════════════════════════ WHY SECTION ═══════════════════════════ -->
-  <section class="max-w-7xl mx-auto px-6 py-28">
+  <section class="max-w-7xl mx-auto px-6 py-28 hide">
     <div class="text-center mb-16">
-      <div class="font-mono text-xs text-[var(--accent)] tracking-widest uppercase mb-3" data-aos="fade-up">// Why HeyTyom</div>
-      <h2 class="font-heading font-bold text-4xl lg:text-5xl" data-aos="fade-up" data-aos-delay="100">What Makes This Different</h2>
+      <div class="font-mono text-xs text-[var(--accent)] tracking-widest uppercase mb-3" data-aos="fade-up">// Why
+        HeyTyom</div>
+      <h2 class="font-heading font-bold text-4xl lg:text-5xl" data-aos="fade-up" data-aos-delay="100">What Makes This
+        Different</h2>
     </div>
     <div class="grid md:grid-cols-3 gap-6">
       <div class="card p-8" data-aos="fade-up" data-aos-delay="100">
         <div class="font-display text-6xl text-[var(--accent)] opacity-30 mb-4">01</div>
         <h3 class="font-heading font-bold text-xl mb-3">Armenian-First</h3>
-        <p class="text-[var(--muted)] text-sm leading-relaxed">The only Armenian-language destination for serious AI content. No translation lag. Direct, native insight.</p>
+        <p class="text-[var(--muted)] text-sm leading-relaxed">The only Armenian-language destination for serious AI
+          content. No translation lag. Direct, native insight.</p>
       </div>
       <div class="card p-8" data-aos="fade-up" data-aos-delay="150">
         <div class="font-display text-6xl text-[var(--accent)] opacity-30 mb-4">02</div>
         <h3 class="font-heading font-bold text-xl mb-3">Real Tools. Real Results.</h3>
-        <p class="text-[var(--muted)] text-sm leading-relaxed">Every tool reviewed is tested in actual workflows. No sponsored bias, no filler — just what actually works.</p>
+        <p class="text-[var(--muted)] text-sm leading-relaxed">Every tool reviewed is tested in actual workflows. No
+          sponsored bias, no filler — just what actually works.</p>
       </div>
       <div class="card p-8" data-aos="fade-up" data-aos-delay="200">
         <div class="font-display text-6xl text-[var(--accent)] opacity-30 mb-4">03</div>
         <h3 class="font-heading font-bold text-xl mb-3">Cinematic Storytelling</h3>
-        <p class="text-[var(--muted)] text-sm leading-relaxed">Tech content that feels like a film — not a listicle. Every story is crafted for emotional resonance.</p>
+        <p class="text-[var(--muted)] text-sm leading-relaxed">Tech content that feels like a film — not a listicle.
+          Every story is crafted for emotional resonance.</p>
       </div>
     </div>
   </section>
@@ -626,17 +866,19 @@
     <div class="grid-bg"></div>
     <div class="glow-blob w-96 h-96 bg-[var(--accent)] top-0 left-1/2 -translate-x-1/2"></div>
     <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
-      <div class="font-mono text-xs text-[var(--accent)] tracking-widest uppercase mb-4" data-aos="fade-up">// Join the Community</div>
-      <h2 class="font-display text-6xl lg:text-8xl mb-6 glow-text" data-aos="fade-up" data-aos-delay="100">FOLLOW<br/>THE SIGNAL</h2>
+      <div class="font-mono text-xs text-[var(--accent)] tracking-widest uppercase mb-4" data-aos="fade-up">// Join the
+        Community</div>
+      <h2 class="font-display text-5xl lg:text-8xl mb-6 glow-text" data-aos="fade-up" data-aos-delay="100">
+        Դասընթացները<br />շուտով</h2>
       <p class="text-[var(--muted)] text-lg mb-10 max-w-xl mx-auto" data-aos="fade-up" data-aos-delay="200">
-        909 people already tracking the future of AI in Armenian. Don't stay behind.
+        Հետևի՛ր ինձ, որպեսզի բաց չթողնես արհեստական բանականության ամենաթարմ ու օգտակար գործիքները:
       </p>
       <div class="flex flex-wrap justify-center gap-4" data-aos="fade-up" data-aos-delay="300">
         <a href="https://instagram.com/heytyom" target="_blank">
           <button class="btn-accent">Follow @heytyom</button>
         </a>
         <a href="blog.html">
-          <button class="btn-ghost">Read the Blog</button>
+          <button class="btn-ghost hide">Read the Blog</button>
         </a>
       </div>
     </div>
@@ -646,23 +888,30 @@
   <footer class="max-w-7xl mx-auto px-6 py-12">
     <div class="grid md:grid-cols-4 gap-10 mb-10">
       <div class="md:col-span-2">
-        <div class="font-display text-3xl text-[var(--accent)] tracking-widest mb-3">HEYTYOM</div>
-        <p class="text-[var(--muted)] text-sm leading-relaxed max-w-sm">AI · Tech · Stories — Armenian-language tech media at the edge of innovation.</p>
+        <div class="tracking-widest mb-3 font-display text-3xl ">HEY<span class="text-[var(--accent)] ">TYOM</span>
+        </div>
+        <p class="text-[var(--muted)] text-sm leading-relaxed max-w-sm">AI · Tech · Stories — Armenian-language tech
+          media at the edge of innovation.</p>
       </div>
-      <div>
+      <div class="hide">
         <div class="font-mono text-xs text-[var(--muted)] tracking-widest uppercase mb-4">Pages</div>
-        <div class="space-y-2">
-          <a href="index.html"   class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">Home</a>
-          <a href="tools.html"   class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">AI Tools</a>
-          <a href="blog.html"    class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">Blog</a>
-          <a href="contact.html" class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">Contact</a>
+        <div class="space-y-2 hide">
+          <a href="index.html"
+            class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">Home</a>
+          <a href="tools.html" class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">AI
+            Tools</a>
+          <a href="blog.html"
+            class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">Blog</a>
+          <a href="contact.html"
+            class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">Contact</a>
         </div>
       </div>
       <div>
         <div class="font-mono text-xs text-[var(--muted)] tracking-widest uppercase mb-4">Connect</div>
         <div class="space-y-2">
-          <a href="https://instagram.com/heytyom" target="_blank" class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">Instagram</a>
-          <a href="https://heytyom.am" target="_blank" class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">heytyom.am</a>
+          <a href="https://instagram.com/heytyom" target="_blank"
+            class="block text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">Instagram</a>
+
         </div>
       </div>
     </div>
@@ -681,18 +930,21 @@
     const ring = document.getElementById('cursor-ring');
     document.addEventListener('mousemove', e => {
       cursor.style.left = e.clientX - 6 + 'px';
-      cursor.style.top  = e.clientY - 6 + 'px';
-      ring.style.left   = e.clientX - 20 + 'px';
-      ring.style.top    = e.clientY - 20 + 'px';
+      cursor.style.top = e.clientY - 6 + 'px';
+      ring.style.left = e.clientX - 20 + 'px';
+      ring.style.top = e.clientY - 20 + 'px';
     });
     document.querySelectorAll('a,button').forEach(el => {
       el.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(2.5)'; ring.style.transform = 'scale(1.4)'; });
-      el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)';   ring.style.transform = 'scale(1)'; });
+      el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; ring.style.transform = 'scale(1)'; });
     });
 
     function toggleMenu() {
       document.getElementById('mobileMenu').classList.toggle('hidden');
     }
+
+
   </script>
 </body>
+
 </html>
