@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hy">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HeyTyom — AI · Tech · Stories</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link
     href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap"
     rel="stylesheet" />
+  <title>Scroll Video Story</title>
+
   <style>
     :root {
       --accent: #a6ff00;
@@ -465,14 +466,172 @@
     .hide {
       display: none;
     }
+
+
+    /* ---------------------------------------------------------------------------------------------- */
+
+    /* Վերևի սովորական section */
+
+    .hero {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #111;
+    }
+
+    .hero h1 {
+      font-size: 80px;
+    }
+
+
+    /* Հիմնական scroll animation */
+
+    .video-section {
+
+      height: 800vh;
+      position: relative;
+
+    }
+
+
+    /* Sticky background */
+
+    .video-sticky {
+
+      position: sticky;
+      top: 0;
+
+      height: 100vh;
+      width: 100%;
+
+      overflow: hidden;
+
+    }
+
+
+    /* Video background */
+
+    video {
+
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+
+    }
+
+
+    /* Մուգ layer */
+
+    .overlay {
+
+      position: absolute;
+      inset: 0;
+
+      background: rgba(0, 0, 0, .35);
+
+    }
+
+
+    /* Text container */
+
+    .content {
+
+      position: absolute;
+      inset: 0;
+
+      z-index: 5;
+
+    }
+
+
+
+    /* Text blocks */
+
+    .text {
+
+      position: absolute;
+
+      width: 500px;
+
+      left: 10%;
+      top: 50%;
+
+      transform:
+        translateY(-50%) translateX(-100px);
+
+      opacity: 0;
+
+    }
+
+
+    .text h2 {
+
+      font-size: 70px;
+      margin: 0 0 20px;
+
+    }
+
+
+    .text p {
+
+      font-size: 24px;
+      line-height: 1.5;
+
+    }
+
+
+
+    /* ներքևի section */
+
+    .end {
+
+      height: 100vh;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: #111;
+
+    }
+
+    .end h2 {
+
+      font-size: 80px;
+
+    }
+
+    @media only screen and (max-width: 600px) {
+      #scrollVideo {
+        height: 100vh;
+      }
+
+      .text h2 {
+        font-size: 56px;
+      }
+
+      .text p {
+        font-size: 18px;
+      }
+
+      .text {
+        width: 450px;
+        padding: 13px;
+        backdrop-filter: blur(4px) saturate(100%);
+        background: rgb(0 0 0 / 8%);
+        border-radius: 10px;
+      }
+    }
   </style>
+
 </head>
+
 
 <body>
 
-  <!-- Custom Cursor -->
-  <div id="cursor"></div>
-  <div id="cursor-ring"></div>
+
 
   <!-- ═══════════════════════════ NAV ═══════════════════════════ -->
   <nav>
@@ -623,6 +782,95 @@
       </svg>
     </div>
   </section>
+
+
+
+
+  <section class="video-section">
+
+
+    <div class="video-sticky">
+
+
+      <video id="scrollVideo" muted playsinline preload="auto">
+      </video>
+
+
+      <div class="overlay"></div>
+
+
+
+      <div class="content">
+
+
+        <div class="text" data-start="0" data-end="0.25">
+
+          <h2 class="block text-[var(--accent)] glow-text glitch">
+            Artificial Inteligance
+          </h2>
+
+          <p>
+            Ապագայի տեխնոլոգիաները սկսվում են այստեղ
+          </p>
+
+        </div>
+
+
+
+
+        <div class="text" data-start="0.25" data-end="0.55">
+
+          <h2>
+            AI SYSTEM
+          </h2>
+
+          <p>
+            Ամենակարևոր նորությունները AI աշխարհից
+          </p>
+
+        </div>
+
+
+
+
+        <div class="text" data-start="0.55" data-end="0.85">
+
+          <h2>
+            NEXT LEVEL
+          </h2>
+
+          <p>
+            Մոդելներ, գործիքներ և տեխնոլոգիաներ, որոնք փոխում են բոլորիս ապագան
+          </p>
+
+        </div>
+
+
+
+        <div class="text" data-start="0.85" data-end="1">
+
+          <h2>
+            FUTURE
+          </h2>
+
+          <p>
+            is here
+          </p>
+
+        </div>
+
+
+
+      </div>
+
+
+    </div>
+
+
+  </section>
+
+
+
 
   <!-- ═══════════════════════════ MARQUEE ═══════════════════════════ -->
   <div class="border-y border-[var(--border)] py-4 overflow-hidden bg-[var(--surface)]">
@@ -921,6 +1169,448 @@
     </div>
   </footer>
 
+
+
+
+  <script>
+
+    const section = document.querySelector(".video-section");
+    const video = document.querySelector("#scrollVideo");
+    const texts = document.querySelectorAll(".text");
+
+
+    let targetTime = 0;
+    let currentTime = 0;
+
+
+    video.src =
+      window.matchMedia("(max-width: 768px)").matches
+        ? "particles-scrub-mobile.mp4"
+        : "robotic-scrub.mp4";
+
+
+
+    video.addEventListener("loadedmetadata", () => {
+
+
+      video.currentTime = 0;
+
+
+
+      function updateScroll() {
+
+
+        const sectionTop =
+          section.offsetTop;
+
+
+        const sectionHeight =
+          section.offsetHeight;
+
+
+        const scrollY =
+          window.scrollY;
+
+
+
+        const start =
+          sectionTop;
+
+
+
+        const end =
+          sectionTop +
+          sectionHeight -
+          window.innerHeight;
+
+
+
+        let progress =
+          (scrollY - start) /
+          (end - start);
+
+
+
+        progress =
+          Math.max(
+            0,
+            Math.min(1, progress)
+          );
+
+
+
+        /*
+          SCROLL -> VIDEO
+        */
+
+
+        targetTime =
+          progress * video.duration;
+
+
+
+
+
+        /*
+          TEXT ANIMATION
+        */
+
+
+        texts.forEach(text => {
+
+
+          const from =
+            Number(text.dataset.start);
+
+
+          const to =
+            Number(text.dataset.end);
+
+
+
+          if (
+            progress >= from &&
+            progress <= to
+          ) {
+
+
+            let local =
+              (progress - from) /
+              (to - from);
+
+
+
+            let opacity = 1;
+
+
+
+            if (local < 0.2) {
+
+              opacity =
+                local / 0.2;
+
+            }
+
+
+
+            if (local > 0.8) {
+
+              opacity =
+                (1 - local) / 0.2;
+
+            }
+
+
+
+            text.style.opacity =
+              opacity;
+
+
+
+            text.style.transform =
+              `
+        translateY(-50%)
+        translateX(${(1 - opacity) * -100}px)
+        `;
+
+
+
+          }
+
+          else {
+
+
+            text.style.opacity = 0;
+
+
+          }
+
+
+
+        });
+
+
+      }
+
+
+
+
+
+      window.addEventListener(
+        "scroll",
+        updateScroll,
+        {
+          passive: true
+        }
+      );
+
+
+
+
+      /*
+        SMOOTH VIDEO ENGINE
+
+        Setting video.currentTime triggers a real decode seek
+        (find nearest keyframe, decode forward, paint) that is
+        async and can take longer than one rAF tick. Firing a
+        new seek before the previous one resolves causes the
+        browser to drop/coalesce requests, which reads as
+        stutter. So we track in-flight seeks with "seeking" and
+        only ever have one outstanding at a time.
+      */
+
+      let seeking = false;
+
+      video.addEventListener("seeked", () => {
+        seeking = false;
+      });
+
+      function animateVideo() {
+
+        currentTime +=
+          (targetTime - currentTime) * 0.25;
+
+        if (
+          !seeking &&
+          Math.abs(
+            video.currentTime - currentTime
+          ) > 0.01
+        ) {
+
+          seeking = true;
+
+          video.currentTime =
+            currentTime;
+
+        }
+
+        requestAnimationFrame(
+          animateVideo
+        );
+
+      }
+
+
+
+
+
+      animateVideo();
+
+      updateScroll();
+
+
+
+    });
+
+  </script>
+  <!-- <script>
+
+
+    const section =
+      document.querySelector(".video-section");
+
+
+    const video =
+      document.querySelector("#scrollVideo");
+
+
+    const texts =
+      document.querySelectorAll(".text");
+
+
+
+    let targetTime = 0;
+    let currentTime = 0;
+
+
+
+
+    video.addEventListener(
+      "loadedmetadata",
+      () => {
+
+
+        function update() {
+
+
+
+          const rect =
+            section.getBoundingClientRect();
+
+
+
+          const distance =
+            section.offsetHeight -
+            window.innerHeight;
+
+
+
+          let progress =
+            (-rect.top) / distance;
+
+
+
+          progress =
+            Math.max(
+              0,
+              Math.min(1, progress)
+            );
+
+
+
+
+          /*
+          VIDEO CONTROL
+          
+          scroll ↓ forward
+          scroll ↑ backward
+          
+          */
+
+          targetTime =
+            progress * video.duration;
+
+
+
+
+
+
+          /*
+          TEXT CONTROL
+          
+          */
+
+          texts.forEach(text => {
+
+
+            let start =
+              Number(text.dataset.start);
+
+
+            let end =
+              Number(text.dataset.end);
+
+
+
+            if (
+              progress >= start &&
+              progress <= end
+            ) {
+
+
+              let local =
+                (progress - start) /
+                (end - start);
+
+
+
+              let opacity;
+
+
+              if (local < .2) {
+
+                opacity =
+                  local / .2;
+
+              }
+              else if (local > .8) {
+
+                opacity =
+                  (1 - local) / .2;
+
+              }
+              else {
+
+                opacity = 1;
+
+              }
+
+
+
+              let move =
+                100 * (1 - opacity);
+
+
+
+              text.style.opacity =
+                opacity;
+
+
+
+              text.style.transform =
+                `
+translateY(-50%)
+translateX(-${move}px)
+`;
+
+
+
+            }
+            else {
+
+
+              text.style.opacity = 0;
+
+
+            }
+
+
+
+          });
+
+
+
+        }
+
+
+
+
+        window.addEventListener(
+          "scroll",
+          update,
+          {
+            passive: true
+          }
+        );
+
+
+
+
+
+        function animate() {
+
+
+          currentTime +=
+            (targetTime - currentTime) * 0.12;
+
+
+
+          video.currentTime =
+            currentTime;
+
+
+
+          requestAnimationFrame(
+            animate
+          );
+
+
+
+        }
+
+
+
+        animate();
+
+        update();
+
+
+
+      });
+
+
+
+  </script> -->
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script>
     AOS.init({ once: true, easing: 'ease-out-cubic', duration: 700 });
@@ -945,6 +1635,7 @@
 
 
   </script>
+
 </body>
 
 </html>
