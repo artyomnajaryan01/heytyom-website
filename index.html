@@ -1181,154 +1181,86 @@
 
     let targetTime = 0;
     let currentTime = 0;
+    let seeking = false;
+    let videoReady = false;
 
+
+    video.muted = true;
 
     video.src =
       window.matchMedia("(max-width: 768px)").matches
         ? "particles-scrub-mobile.mp4"
         : "robotic-scrub.mp4";
 
+    video.load();
 
 
-    video.addEventListener("loadedmetadata", () => {
+    /*
+      Everything below used to live inside a `loadedmetadata`
+      listener. On real mobile browsers (iOS Safari, Android
+      Chrome), video loading/decoding can be blocked until a
+      genuine user gesture happens — a page scroll alone doesn't
+      always count. If that event never fires, nothing inside it
+      ever ran: no scroll listener, no animation loop. Desktop
+      "device mode" emulation doesn't enforce that restriction,
+      which is why it worked there but not on a real phone.
+
+      Fix: register the scroll listener and animation loop
+      unconditionally, guard them against the video not being
+      ready yet, and explicitly unlock loading on first touch.
+    */
+
+    function updateScroll() {
 
 
-      video.currentTime = 0;
+      const sectionTop =
+        section.offsetTop;
 
 
-
-      function updateScroll() {
-
-
-        const sectionTop =
-          section.offsetTop;
+      const sectionHeight =
+        section.offsetHeight;
 
 
-        const sectionHeight =
-          section.offsetHeight;
-
-
-        const scrollY =
-          window.scrollY;
-
-
-
-        const start =
-          sectionTop;
-
-
-
-        const end =
-          sectionTop +
-          sectionHeight -
-          window.innerHeight;
+      const scrollY =
+        window.scrollY;
 
 
 
-        let progress =
-          (scrollY - start) /
-          (end - start);
+      const start =
+        sectionTop;
 
 
 
-        progress =
-          Math.max(
-            0,
-            Math.min(1, progress)
-          );
+      const end =
+        sectionTop +
+        sectionHeight -
+        window.innerHeight;
 
 
 
-        /*
-          SCROLL -> VIDEO
-        */
+      let progress =
+        (scrollY - start) /
+        (end - start);
 
+
+
+      progress =
+        Math.max(
+          0,
+          Math.min(1, progress)
+        );
+
+
+
+      /*
+        SCROLL -> VIDEO
+      */
+
+
+      if (videoReady) {
 
         targetTime =
           progress * video.duration;
-
-
-
-
-
-        /*
-          TEXT ANIMATION
-        */
-
-
-        texts.forEach(text => {
-
-
-          const from =
-            Number(text.dataset.start);
-
-
-          const to =
-            Number(text.dataset.end);
-
-
-
-          if (
-            progress >= from &&
-            progress <= to
-          ) {
-
-
-            let local =
-              (progress - from) /
-              (to - from);
-
-
-
-            let opacity = 1;
-
-
-
-            if (local < 0.2) {
-
-              opacity =
-                local / 0.2;
-
-            }
-
-
-
-            if (local > 0.8) {
-
-              opacity =
-                (1 - local) / 0.2;
-
-            }
-
-
-
-            text.style.opacity =
-              opacity;
-
-
-
-            text.style.transform =
-              `
-        translateY(-50%)
-        translateX(${(1 - opacity) * -100}px)
-        `;
-
-
-
-          }
-
-          else {
-
-
-            text.style.opacity = 0;
-
-
-          }
-
-
-
-        });
-
 
       }
 
@@ -1336,36 +1268,127 @@
 
 
 
-      window.addEventListener(
-        "scroll",
-        updateScroll,
-        {
-          passive: true
-        }
-      );
-
-
-
-
       /*
-        SMOOTH VIDEO ENGINE
-
-        Setting video.currentTime triggers a real decode seek
-        (find nearest keyframe, decode forward, paint) that is
-        async and can take longer than one rAF tick. Firing a
-        new seek before the previous one resolves causes the
-        browser to drop/coalesce requests, which reads as
-        stutter. So we track in-flight seeks with "seeking" and
-        only ever have one outstanding at a time.
+        TEXT ANIMATION
       */
 
-      let seeking = false;
 
-      video.addEventListener("seeked", () => {
-        seeking = false;
+      texts.forEach(text => {
+
+
+        const from =
+          Number(text.dataset.start);
+
+
+        const to =
+          Number(text.dataset.end);
+
+
+
+        if (
+          progress >= from &&
+          progress <= to
+        ) {
+
+
+          let local =
+            (progress - from) /
+            (to - from);
+
+
+
+          let opacity = 1;
+
+
+
+          if (local < 0.2) {
+
+            opacity =
+              local / 0.2;
+
+          }
+
+
+
+          if (local > 0.8) {
+
+            opacity =
+              (1 - local) / 0.2;
+
+          }
+
+
+
+          text.style.opacity =
+            opacity;
+
+
+
+          text.style.transform =
+            `
+        translateY(-50%)
+        translateX(${(1 - opacity) * -100}px)
+        `;
+
+
+
+        }
+
+        else {
+
+
+          text.style.opacity = 0;
+
+
+        }
+
+
+
       });
 
-      function animateVideo() {
+
+    }
+
+
+    window.addEventListener(
+      "scroll",
+      updateScroll,
+      {
+        passive: true
+      }
+    );
+
+
+    video.addEventListener("loadedmetadata", () => {
+
+      videoReady = true;
+
+      video.currentTime = 0;
+
+      updateScroll();
+
+    });
+
+
+    /*
+      SMOOTH VIDEO ENGINE
+
+      Setting video.currentTime triggers a real decode seek
+      (find nearest keyframe, decode forward, paint) that is
+      async and can take longer than one rAF tick. Firing a
+      new seek before the previous one resolves causes the
+      browser to drop/coalesce requests, which reads as
+      stutter. So we track in-flight seeks with "seeking" and
+      only ever have one outstanding at a time.
+    */
+
+    video.addEventListener("seeked", () => {
+      seeking = false;
+    });
+
+    function animateVideo() {
+
+      if (videoReady) {
 
         currentTime +=
           (targetTime - currentTime) * 0.25;
@@ -1384,21 +1407,48 @@
 
         }
 
-        requestAnimationFrame(
-          animateVideo
-        );
-
       }
 
+      requestAnimationFrame(
+        animateVideo
+      );
+
+    }
 
 
+    animateVideo();
+
+    updateScroll();
 
 
-      animateVideo();
+    /*
+      MOBILE LOAD UNLOCK
 
-      updateScroll();
+      Muted play()->pause() is allowed without a user gesture on
+      most browsers, but on some mobile browsers actual buffering
+      only starts in response to real user interaction. Firing
+      this on the first touch/click/keydown nudges the video to
+      start loading immediately instead of waiting indefinitely.
+    */
 
+    function unlockVideo() {
 
+      video.play()
+        .then(() => video.pause())
+        .catch(() => {});
+
+    }
+
+    ["touchstart", "pointerdown", "click", "keydown"].forEach(evt => {
+
+      window.addEventListener(
+        evt,
+        unlockVideo,
+        {
+          once: true,
+          passive: true
+        }
+      );
 
     });
 
