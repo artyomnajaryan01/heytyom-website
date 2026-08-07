@@ -1386,12 +1386,53 @@
       seeking = false;
     });
 
+
+    /*
+      On a first-ever visit the browser hasn't downloaded the
+      whole file yet, so seeking ahead of what's actually been
+      fetched forces a network stall (the real cause of the
+      "not smooth on first scroll" jank). Clamping the seek
+      target to the buffered range means we simply trail a
+      little behind on that first pass instead of stalling —
+      it catches up on its own as the download completes.
+    */
+
+    function bufferedEnd() {
+
+      const ranges = video.buffered;
+
+      let end = 0;
+
+      for (let i = 0; i < ranges.length; i++) {
+
+        if (ranges.start(i) <= video.currentTime + 0.001) {
+
+          end = Math.max(end, ranges.end(i));
+
+        }
+
+      }
+
+      return end;
+
+    }
+
+
     function animateVideo() {
 
       if (videoReady) {
 
         currentTime +=
           (targetTime - currentTime) * 0.25;
+
+        const safeLimit =
+          Math.max(0, bufferedEnd() - 0.15);
+
+        if (currentTime > safeLimit) {
+
+          currentTime = safeLimit;
+
+        }
 
         if (
           !seeking &&
